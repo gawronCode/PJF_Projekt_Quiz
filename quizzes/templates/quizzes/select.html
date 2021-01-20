@@ -11,7 +11,7 @@
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container">
-                <a class="navbar-brand" >QuizApp</a>
+                <a class="navbar-brand" style="user-select: none" >QuizApp</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -34,25 +34,36 @@
     </header>
     <div class="container">
         <main role="main" class="pb-3">
+            <div class="container">
+                <div class="row">
+                <h1 class="display-4">Wybierz quiz który chcesz rozwiązać</h1>
+                </div>
 
-
-            {% if quizzes %}
-                <ul>
+                {% if quizzes %}
+                <div class="row" style="margin-top: 20px; margin-bottom: 30px">
+                    <h3>Liczba dostępnych quizów: {{ quizzes|length }}</h3>
+                </div>
                 {% for quiz in quizzes %}
-                    <h1>{{ quiz.title }}</h1>
+                    <div class="row">
+                        <div class="media">
+                            <div class="media-body">
+                                <h4 style="margin: 0">{{ quiz.title }}</h4>
+                                <a class="btn btn-secondary btn-sm" role="button" style="margin-top: 10px; color:white">Rozwiąż quiz</a>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
                 {% endfor %}
-                </ul>
                 {% else %}
                     <p>Brak quizów w bazie danych</p>
             {% endif %}
-
-
+            </div>
         </main>
     </div>
 
     <div class="navbar-fixed-bottom">
     <footer class="border-top footer text-muted" style="position: fixed; height: 60px; bottom: 0; width: 100%">
-        <div class="container">
+        <div class="container" style="margin-top: 15px">
             &copy; 2021 - QuizApp
         </div>
     </footer>
