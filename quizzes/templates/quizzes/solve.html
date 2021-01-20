@@ -11,7 +11,7 @@
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container">
-                <a class="navbar-brand" style="user-select: none">QuizApp</a>
+                <a class="navbar-brand" style="user-select: none" >QuizApp</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -34,17 +34,45 @@
     </header>
     <div class="container">
         <main role="main" class="pb-3">
+            <div class="container">
 
+                <div class="row">
+                <h1 class="display-4">{{ quiz.title }}</h1>
+                </div>
 
-            <h1>SOLVE</h1>
+                {% for question in quiz.question_set.all %}
 
+                    <div class="row" style="margin-left: -5px">
+                        <div class="media">
+                            <div class="media-body">
 
+                                <h5 style="margin-top: 20px">{{ question.contents }}</h5>
+
+                                {% for answer in question.answer_set.all %}
+                                    <div class="form-check" style="margin-left: 4px">
+                                        <input class="form-check-input" id="inlineRadio" name={{ question.id }} type="radio" value={{ answer.is_true }}>
+                                        <label class="form-check-label" for="inlineRadio">{{ answer.contents }}</label>
+                                    </div>
+                                {% endfor %}
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                    <hr>
+                {% endfor %}
+                <div class="row">
+                    <button id="sendBtn" class="btn btn-dark" type="submit"  style="margin-top: 10px; color: white; width: 200px">Zakończ</button>
+                    <a href="/quizzes/select" class="btn btn-danger" style="margin-top: 10px; margin-left: 10px; width: 200px">Anuluj</a>
+                </div>
+            </div>
         </main>
     </div>
 
     <div class="navbar-fixed-bottom">
-    <footer class="border-top footer text-muted" style="position: fixed; height: 60px; bottom: 0; width: 100%">
-        <div class="container">
+     <footer class="border-top footer text-muted" style="position: fixed; height: 60px; bottom: 0; width: 100%; user-select: none">
+        <div class="container" style="margin-top: 15px">
             &copy; 2021 - QuizApp
         </div>
     </footer>

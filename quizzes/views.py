@@ -4,8 +4,9 @@ from django.shortcuts import render
 
 from django.http import HttpResponse
 from django.template import loader
+from django.shortcuts import get_object_or_404
 
-from .models import Quiz
+from .models import Quiz, Question, Answer
 
 
 def index(request):
@@ -13,7 +14,7 @@ def index(request):
 
 
 def select(request):
-    quizzes = Quiz.objects.order_by('-title')[:5]
+    quizzes = Quiz.objects.only()[:]
     template = loader.get_template('quizzes/select.html')
     context = {
         'quizzes': quizzes
@@ -22,7 +23,12 @@ def select(request):
 
 
 def solve(request, quiz_id):
-    return render(request, 'quizzes/solve.html')
+    quiz = get_object_or_404(Quiz, id=quiz_id)
+    template = loader.get_template('quizzes/solve.html')
+    context = {
+        'quiz': quiz,
+    }
+    return HttpResponse(template.render(context, request))
 
 
 def result(request, quiz_id):
