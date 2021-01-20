@@ -5,13 +5,20 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.template import loader
 
+from .models import Quiz
+
 
 def index(request):
     return render(request, 'quizzes/index.html')
 
 
 def select(request):
-    return render(request, 'quizzes/select.html')
+    quizzes = Quiz.objects.order_by('-title')[:5]
+    template = loader.get_template('quizzes/select.html')
+    context = {
+        'quizzes': quizzes
+    }
+    return HttpResponse(template.render(context, request))
 
 
 def solve(request, quiz_id):
