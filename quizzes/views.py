@@ -32,8 +32,45 @@ def solve(request, quiz_id):
 
 
 def result(request, quiz_id):
-    return render(request, 'quizzes/result.html')
+    quiz = get_object_or_404(Quiz, pk=quiz_id)
+    template = loader.get_template('quizzes/result.html')
+    answers = []
 
+    questions = quiz.question_set.all()
+
+    for question in questions:
+        x = request.POST.get('answer{}'.format(question.id), 'none')
+
+        if x == 'none':
+            context = {
+                'error_message': 'Nie udzielono odpowiedzi na wszystkie pytania :(',
+            }
+            return HttpResponse(template.render(context, request))
+        else:
+            answers.append((lambda x: True if x == 'True' else False)(x))
+
+    correct_answers = 0
+    total_answers = 0
+
+    for answer in answers:
+        total_answers += 1
+        if answer:
+            correct_answers += 1
+        elif answer is None:
+            context = {
+                'error_message': 'Nie udzielono odpowiedzi na wszystkie pytania.',
+            }
+            return HttpResponse(template.render(context, request))
+
+    context = {
+        'correct_answers': correct_answers,
+        'total_answers': total_answers,
+    }
+    return HttpResponse(template.render(context, request))
+
+
+# def result(request, quiz_id):
+#     return render(request, 'quizzes/result.html')
 
 def create(request):
     return render(request, 'quizzes/create.html')

@@ -35,9 +35,25 @@
     <div class="container">
         <main role="main" class="pb-3">
 
+            {% if error_message is None %}
 
-            <h1>RESULT</h1>
+                <div class="d-flex justify-content-center" style="margin-top: 40px">
+                    <h1 class="display-4">Odpowiedziałeś dobrze na {{ correct_answers }} z {{ total_answers }} pytań.</h1>
+                </div>
 
+                <div class="d-flex justify-content-center" style="margin-top: 10px">
+                    <a href="/quizzes/select" class="btn btn-dark btn-lg" style="margin-top: 10px; margin-left: 10px; width: 200px">Powrót</a>
+                </div>
+
+            {% else %}
+
+                <h1 class="display-4 text-center">{{ error_message }}</h1>
+
+            {% endif %}
+
+                <div class="d-flex justify-content-center" style="margin-top: 10px">
+                    <a href="/quizzes/select" class="btn btn-dark btn-lg" style="margin-top: 10px; margin-left: 10px; width: 200px">Powrót</a>
+                </div>
 
         </main>
     </div>
