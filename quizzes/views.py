@@ -69,9 +69,15 @@ def result(request, quiz_id):
     return HttpResponse(template.render(context, request))
 
 
-# def result(request, quiz_id):
-#     return render(request, 'quizzes/result.html')
-
 def manage(request):
+    quizzes = Quiz.objects.only()[:]
+    template = loader.get_template('quizzes/manage.html')
+    context = {
+        'quizzes': quizzes
+    }
+    return HttpResponse(template.render(context, request))
+
+
+def create(request):
     return render(request, 'quizzes/manage.html')
 

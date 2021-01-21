@@ -32,19 +32,63 @@
             </div>
         </nav>
     </header>
-    <div class="container" style="height: auto">
+
+
+
+    <div class="container">
         <main role="main" class="pb-3">
+            <div class="container">
 
 
-            <h1>CREATE</h1>
+                <div class="row" style="margin-bottom: 50px">
+                <h1 class="display-4">Quizy w bazie danych: {{ quizzes|length }}</h1>
+                </div>
+
+                {% if quizzes %}
+
+                {% for quiz in quizzes %}
+                    <div class="row">
+                        <div class="media">
+                            <div class="media-body">
+                                <h4 style="margin: 0">{{ quiz.title }}</h4>
+                                <a href="{% url 'solve' quiz.id %}" class="btn btn-secondary btn-sm" role="button" style="margin-top: 10px; color:white; width: 100px">Edytuj</a>
+                                <a href="{% url 'solve' quiz.id %}" class="btn btn-danger btn-sm" role="button" style="margin-top: 10px; color:white; width: 100px">Usuń</a>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                {% endfor %}
+                {% else %}
+                    <div class="row" style="margin-top: 20px">
+                    <p style="font-size: large">Brak quizów w bazie danych.</p>
+                    </div>
+            {% endif %}
 
 
+            <div class="row" style="margin-top: 60px">
+                <button onclick="toggle()" id="addNewQuiz" class="btn btn-dark">Dodaj nowy quiz</button>
+            </div>
+
+            <div class="row">
+                <div class="rounded" id="addNewQuizDiv" style="display: none; margin-top: 15px; background-color: gainsboro; width: 420px; padding: 10px">
+                    <form action="{% url 'create' %}" method="post">
+                        <div class="form-group">
+                            <input class="form-control" name="questionnaireName" id="newQuestionnaire" placeholder="Tytuł nowego quizu" style="width: 400px">
+                        </div>
+                        <input type="submit" id="sendBtn" class="btn btn-dark" type="submit"  style="margin-top: 5px; color: white; width: 200px" value="Stwórz quiz">
+                    </form>
+                </div>
+            </div>
+
+            </div>
         </main>
     </div>
 
+
+
     <div class="navbar-fixed-bottom">
-    <footer class="border-top footer text-muted" style="position: fixed; height: 60px; bottom: 0; width: 100%">
-        <div class="container">
+     <footer class="border-top footer text-muted" style="position: fixed; height: 60px; bottom: 0; width: 100%; user-select: none">
+        <div class="container" style="margin-top: 15px">
             &copy; 2021 - QuizApp
         </div>
     </footer>
@@ -52,3 +96,17 @@
 
 </body>
 </html>
+
+<script>
+
+    function toggle() {
+        const x = document.getElementById("addNewQuizDiv");
+        if (x.style.display === "none") {
+                x.style.display = "block";
+          } else {
+                x.style.display = "none";
+          }
+
+}
+
+</script>
