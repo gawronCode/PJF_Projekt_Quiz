@@ -80,7 +80,6 @@ def manage(request):
 
 
 def create(request):
-
     quiz_name = request.POST.get('quizName', 'none')
 
     if quiz_name == 'none':
@@ -113,7 +112,6 @@ def edit(request, quiz_id):
 
 
 def add_question(request, quiz_id):
-
     question_contents = request.POST.get('questionContents', 'none')
 
     if question_contents == 'none':
@@ -123,7 +121,7 @@ def add_question(request, quiz_id):
     new_question = Question(contents=question_contents, quiz_id=quiz_id)
     new_question.save()
 
-    response = redirect('edit', quiz_id)
+    response = redirect('edit_question', new_question.id)
     return response
 
 
@@ -135,5 +133,37 @@ def delete_question(request, question_id):
     return response
 
 
+def edit_question(request, question_id):
+    question = get_object_or_404(Question, id=question_id)
+    template = loader.get_template('quizzes/edit_question.html')
+    context = {
+        'question': question,
+        'quiz_id': question.quiz_id
+    }
+    return HttpResponse(template.render(context, request))
 
 
+def add_answer(request, question_id):
+    answer_contents = request.POST.get('answerContents', 'none')
+    answer_is_true = request.POST.get('answerIsTrue', 'none')
+
+    if answer_contents == 'none':
+        response = redirect('edit_question', question_id)
+        return response
+
+    new_answer = Answer(contents=answer_contents,
+                        is_true=(lambda x: True if x == 'True' else False)(answer_is_true),
+                        question_id=question_id)
+
+    new_answer.save()
+
+    response = redirect('edit_question', new_answer.question_id)
+    return response
+
+
+def delete_answer(request, answer_id):
+    answer = get_object_or_404(Answer, pk=answer_id)
+    question_id = answer.question_id
+    answer.delete()
+    response = redirect('edit_question', question_id)
+    return response
