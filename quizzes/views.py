@@ -5,6 +5,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.template import loader
 from django.shortcuts import get_object_or_404
+from django.shortcuts import redirect
 
 from .models import Quiz, Question, Answer
 
@@ -79,5 +80,34 @@ def manage(request):
 
 
 def create(request):
-    return render(request, 'quizzes/manage.html')
+
+    quiz_name = request.POST.get('quizName', 'none')
+
+    if quiz_name == 'none':
+        response = redirect('manage')
+        return response
+
+    new_quiz = Quiz(title=quiz_name)
+    new_quiz.save()
+
+    new_quiz_id = new_quiz.id
+
+    response = redirect('edit', new_quiz_id)
+    return response
+
+
+def delete(request, quiz_id):
+    quiz = get_object_or_404(Quiz, pk=quiz_id)
+    quiz.delete()
+    response = redirect('manage')
+    return response
+
+
+def edit(request, quiz_id):
+    quiz = get_object_or_404(Quiz, id=quiz_id)
+    template = loader.get_template('quizzes/edit.html')
+    context = {
+        'quiz': quiz,
+    }
+    return HttpResponse(template.render(context, request))
 

@@ -1,0 +1,93 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>QuizApp</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'quizzes/bootstrap.css' %}" />
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container">
+                <a class="navbar-brand" style="user-select: none" >QuizApp</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a href="/quizzes/" class="nav-link text-dark" >Strona Główna</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/quizzes/select" class="nav-link text-dark" >Wybierz quiz</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/quizzes/manage" class="nav-link text-dark" >Manager quizów</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            <div class="container">
+
+                {% if quiz.question_set.all|length == 0 %}
+
+                    <div class="d-flex justify-content-center" style="margin-top: 30px">
+                        <h1 class="display-4 text-center">{{ quiz.title }} nie zawiera żadnych ptyań.</h1>
+                    </div>
+
+                {% else %}
+
+                <div class="row">
+                <h1 class="display-4">{{ quiz.title }}</h1>
+                </div>
+
+
+                    {% for question in quiz.question_set.all %}
+                        <div class="row" style="margin-left: -5px">
+                            <div class="media">
+                                <div class="media-body">
+
+                                    <h5 style="margin-top: 20px">{{ question.contents }}</h5>
+
+                                        {% for answer in question.answer_set.all %}
+                                            <div class="form-check" style="margin-left: 4px">
+                                                <input class="form-check-input" id="answer{{ forloop.counter }}" name="answer{{ question.id }}" type="radio" value={{ answer.is_true }}>
+                                                <label class="form-check-label" for="answer{{ forloop.counter }}">{{ answer.contents }}</label>
+                                            </div>
+                                        {% endfor %}
+
+                                </div>
+
+                            </div>
+
+                        </div>
+                        <hr>
+                    {% endfor %}
+
+            {% endif %}
+
+                    <div class="row">
+                        <a href="/quizzes/manage" class="btn btn-dark" style="margin-top: 10px; margin-left: 10px; width: 200px">Powrót</a>
+                    </div>
+
+            </div>
+        </main>
+    </div>
+
+    <div class="navbar-fixed-bottom">
+     <footer class="border-top footer text-muted" style="position: fixed; height: 60px; bottom: 0; width: 100%; user-select: none">
+        <div class="container" style="margin-top: 15px">
+            &copy; 2021 - QuizApp
+        </div>
+    </footer>
+    </div>
+
+</body>
+</html>

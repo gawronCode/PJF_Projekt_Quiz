@@ -51,8 +51,8 @@
                         <div class="media">
                             <div class="media-body">
                                 <h4 style="margin: 0">{{ quiz.title }}</h4>
-                                <a href="{% url 'solve' quiz.id %}" class="btn btn-secondary btn-sm" role="button" style="margin-top: 10px; color:white; width: 100px">Edytuj</a>
-                                <a href="{% url 'solve' quiz.id %}" class="btn btn-danger btn-sm" role="button" style="margin-top: 10px; color:white; width: 100px">Usuń</a>
+                                <a href="{% url 'edit' quiz.id %}" class="btn btn-secondary btn-sm" role="button" style="margin-top: 10px; color:white; width: 100px">Edytuj</a>
+                                <a href="{% url 'delete' quiz.id %}" class="btn btn-danger btn-sm" role="button" style="margin-top: 10px; color:white; width: 100px">Usuń</a>
                             </div>
                         </div>
                     </div>
@@ -73,7 +73,7 @@
                 <div class="rounded" id="addNewQuizDiv" style="display: none; margin-top: 15px; background-color: gainsboro; width: 420px; padding: 10px">
                     <form action="{% url 'create' %}" method="post">
                         <div class="form-group">
-                            <input class="form-control" name="questionnaireName" id="newQuestionnaire" placeholder="Tytuł nowego quizu" style="width: 400px">
+                            <input class="form-control" name="quizName" id="newQuiz" placeholder="Tytuł nowego quizu" style="width: 400px">
                         </div>
                         <input type="submit" id="sendBtn" class="btn btn-dark" type="submit"  style="margin-top: 5px; color: white; width: 200px" value="Stwórz quiz">
                     </form>
