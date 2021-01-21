@@ -36,45 +36,60 @@
         <main role="main" class="pb-3">
             <div class="container">
 
-                {% if quiz.question_set.all|length == 0 %}
 
-                    <div class="d-flex justify-content-center" style="margin-top: 30px">
-                        <h1 class="display-4 text-center">{{ quiz.title }} nie zawiera żadnych ptyań.</h1>
+
+
+
+                    <div class="row">
+                    <h1 class="display-4">{{ quiz.title }}</h1>
                     </div>
 
-                {% else %}
+                    {% if quiz.question_set.all|length == 0 %}
 
-                <div class="row">
-                <h1 class="display-4">{{ quiz.title }}</h1>
-                </div>
+                    <div class="row" style="margin-top: 30px">
+                        <h3>Quiz nie zawiera jeszcze żadnych pytań.</h3>
+                    </div>
 
+                    {% else %}
 
                     {% for question in quiz.question_set.all %}
                         <div class="row" style="margin-left: -5px">
                             <div class="media">
                                 <div class="media-body">
 
-                                    <h5 style="margin-top: 20px">{{ question.contents }}</h5>
+                                    <h5 style="margin-top: 20px; margin-bottom: 20px">{{ question.contents }}</h5>
 
                                         {% for answer in question.answer_set.all %}
-                                            <div class="form-check" style="margin-left: 4px">
-                                                <input class="form-check-input" id="answer{{ forloop.counter }}" name="answer{{ question.id }}" type="radio" value={{ answer.is_true }}>
-                                                <label class="form-check-label" for="answer{{ forloop.counter }}">{{ answer.contents }}</label>
-                                            </div>
+
+                                            <p style="line-height: 5px" id="answer{{ forloop.counter }}" type="radio" >{{ answer.contents }}</p>
+
                                         {% endfor %}
-
+                                        <a href="{% url 'solve' quiz.id %}" class="btn btn-secondary btn-sm" role="button" style="margin-top: 10px; color:white">Edytuj pytanie</a>
+                                        <a href="{% url 'delete_question' question.id %}" class="btn btn-danger btn-sm" role="button" style="margin-top: 10px; color:white">Usuń pytanie</a>
                                 </div>
-
                             </div>
 
                         </div>
                         <hr>
                     {% endfor %}
 
-            {% endif %}
+                    {% endif %}
+
+
+                    <div class="row" style="margin-top: 60px">
+                        <button onclick="toggle()" id="addNewQuestion" class="btn btn-dark" style="width: 200px">Dodaj pytanie</button>
+                        <a href="/quizzes/manage" class="btn btn-dark" style="width: 200px; margin-left: 10px">Powrót</a>
+                    </div>
 
                     <div class="row">
-                        <a href="/quizzes/manage" class="btn btn-dark" style="margin-top: 10px; margin-left: 10px; width: 200px">Powrót</a>
+                        <div class="rounded" id="addNewQuestionDiv" style="display: none; margin-top: 15px; background-color: gainsboro; width: 420px; padding: 10px">
+                            <form action="{% url 'add_question' quiz.id%}" method="post">
+                                <div class="form-group">
+                                    <input class="form-control" name="questionContents" id="newQuestion" placeholder="Treść nowego pytania" style="width: 400px">
+                                </div>
+                                <input type="submit" id="sendBtn" class="btn btn-dark" type="submit"  style="margin-top: 5px; color: white; width: 200px" value="Dodaj">
+                            </form>
+                        </div>
                     </div>
 
             </div>
@@ -91,3 +106,18 @@
 
 </body>
 </html>
+
+
+<script>
+
+    function toggle() {
+        const x = document.getElementById("addNewQuestionDiv");
+        if (x.style.display === "none") {
+                x.style.display = "block";
+          } else {
+                x.style.display = "none";
+          }
+
+    }
+
+</script>

@@ -111,3 +111,29 @@ def edit(request, quiz_id):
     }
     return HttpResponse(template.render(context, request))
 
+
+def add_question(request, quiz_id):
+
+    question_contents = request.POST.get('questionContents', 'none')
+
+    if question_contents == 'none':
+        response = redirect('edit', quiz_id)
+        return response
+
+    new_question = Question(contents=question_contents, quiz_id=quiz_id)
+    new_question.save()
+
+    response = redirect('edit', quiz_id)
+    return response
+
+
+def delete_question(request, question_id):
+    question = get_object_or_404(Question, pk=question_id)
+    question_quiz_id = question.quiz_id
+    question.delete()
+    response = redirect('edit', question_quiz_id)
+    return response
+
+
+
+
