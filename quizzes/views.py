@@ -15,7 +15,20 @@ def index(request):
 
 
 def select(request):
-    quizzes = Quiz.objects.only()[:]
+    quizzes = Quiz.objects.all().filter(question__isnull=False,
+                                        question__answer__isnull=False).distinct()
+
+    ids_to_exclude = []
+
+    for quiz in quizzes:
+        valid_questions = Question.objects.all().filter(quiz_id=quiz.id, answer__is_true=True)
+        all_questions = Question.objects.all().filter(quiz_id=quiz.id)
+        if valid_questions.count() != all_questions.count():
+            ids_to_exclude.append(quiz.id)
+
+    for id_to_exclude in ids_to_exclude:
+        quizzes = quizzes.exclude(id=id_to_exclude)
+
     template = loader.get_template('quizzes/select.html')
     context = {
         'quizzes': quizzes
@@ -25,7 +38,6 @@ def select(request):
 
 def solve(request, quiz_id):
     quiz = get_object_or_404(Quiz, id=quiz_id)
-
 
     template = loader.get_template('quizzes/solve.html')
     context = {
@@ -42,15 +54,15 @@ def result(request, quiz_id):
     questions = quiz.question_set.all()
 
     for question in questions:
-        x = request.POST.get('answer{}'.format(question.id), 'none')
+        is_true = request.POST.get('answer{}'.format(question.id), 'none')
 
-        if x == 'none':
+        if is_true == 'none':
             context = {
                 'error_message': 'Nie udzielono odpowiedzi na wszystkie pytania :(',
             }
             return HttpResponse(template.render(context, request))
         else:
-            answers.append((lambda x: True if x == 'True' else False)(x))
+            answers.append((lambda x: True if x == 'True' else False)(is_true))
 
     correct_answers = 0
     total_answers = 0
@@ -73,7 +85,7 @@ def result(request, quiz_id):
 
 
 def manage(request):
-    quizzes = Quiz.objects.only()[:]
+    quizzes = Quiz.objects.all()
     template = loader.get_template('quizzes/manage.html')
     context = {
         'quizzes': quizzes
