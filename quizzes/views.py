@@ -174,9 +174,16 @@ def add_answer(request, question_id):
                         is_true=(lambda x: True if x == 'True' else False)(answer_is_true),
                         question_id=question_id)
 
+    answers = Answer.objects.all().filter(question_id=question_id)
+
+    if new_answer.is_true:
+        for answer in answers:
+            answer.is_true = False
+            answer.save()
+
     new_answer.save()
 
-    response = redirect('edit_question', new_answer.question_id)
+    response = redirect('edit_question', question_id)
     return response
 
 
@@ -200,7 +207,16 @@ def update_answer(request, answer_id):
         return response
 
     answer_to_update.contents = answer_contents
-    answer_to_update.is_true = (lambda x: True if x == 'True' else False)(answer_is_true)
+    is_true = (lambda x: True if x == 'True' else False)(answer_is_true)
+
+    answers = Answer.objects.all().filter(question_id=answer_to_update.question_id)
+
+    if is_true:
+        for answer in answers:
+            answer.is_true = False
+            answer.save()
+
+    answer_to_update.is_true = is_true
     answer_to_update.save()
 
     response = redirect('edit_question', answer_to_update.question_id)
