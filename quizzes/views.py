@@ -25,6 +25,8 @@ def select(request):
 
 def solve(request, quiz_id):
     quiz = get_object_or_404(Quiz, id=quiz_id)
+
+
     template = loader.get_template('quizzes/solve.html')
     context = {
         'quiz': quiz,

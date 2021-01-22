@@ -60,9 +60,11 @@
                                     <h5 style="margin-top: 20px; margin-bottom: 20px">{{ question.contents }}</h5>
 
                                         {% for answer in question.answer_set.all %}
-
+                                            {% if answer.is_true %}
+                                            <p style="line-height: 5px; color: #34ce57" id="answer{{ forloop.counter }}" type="radio" > - {{ answer.contents }}</p>
+                                            {% else %}
                                             <p style="line-height: 5px" id="answer{{ forloop.counter }}" type="radio" > - {{ answer.contents }}</p>
-
+                                            {% endif %}
                                         {% endfor %}
                                         <a href="{% url 'edit_question' question.id %}" class="btn btn-secondary btn-sm" role="button" style="color:white; width: 150px">Edytuj odpowiedzi</a>
                                         <a href="{% url 'delete_question' question.id %}" class="btn btn-danger btn-sm" role="button" style="color:white; width: 150px">Usuń pytanie</a>
