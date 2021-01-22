@@ -61,8 +61,28 @@
                                     {% else %}
                                     <h5 style="margin-top: 20px; margin-bottom: 10px">{{ answer.contents }}</h5>
                                     {% endif %}
-{#                                    <a href="{% url 'delete_answer' answer.id %}" class="btn btn-secondary btn-sm" role="button" style="color:white">Zmień odpowiedź</a>#}
+                                    <button onclick="toggle('updateAnswerDiv{{ answer.id }}')" id="updateAnswer" class="btn btn-secondary btn-sm" >Edytuj odpowiedź</button>
                                     <a href="{% url 'delete_answer' answer.id %}" class="btn btn-danger btn-sm" role="button" style="color:white">Usuń odpowiedź</a>
+
+                                    <div class="row">
+                                        <div class="rounded" id="updateAnswerDiv{{ answer.id }}" style="display: none; margin-top: 15px; background-color: gainsboro; width: 420px; padding: 10px">
+                                            <form action="{% url 'update_answer' answer.id%}" method="post">
+                                                <div class="form-group">
+                                                    <input class="form-control" name="answerContents" id="newQuestion" value="{{ answer.contents }}" style="width: 400px">
+                                                    <div style="margin-left: 21px; margin-top: 10px">
+                                                        {% if answer.is_true == True %}
+                                                        <input class="form-check-input" type="checkbox" name="answerIsTrue" id="newQuestionIsTrue" value="True" checked>
+                                                        {% else %}
+                                                        <input class="form-check-input" type="checkbox" name="answerIsTrue" id="newQuestionIsTrue" value="True" >
+                                                        {% endif %}
+                                                        <label class="form-check-label" for="answerIsTrue">Poprawna odpowiedź</label>
+                                                    </div>
+                                                </div>
+                                                <input type="submit" id="sendBtn" class="btn btn-dark" type="submit"  style="margin-top: 5px; color: white; width: 200px" value="Zatwierdź zmiany">
+                                            </form>
+                                        </div>
+                                    </div>
+
 
                                 </div>
                             </div>

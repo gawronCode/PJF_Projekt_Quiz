@@ -169,3 +169,22 @@ def delete_answer(request, answer_id):
     answer.delete()
     response = redirect('edit_question', question_id)
     return response
+
+
+def update_answer(request, answer_id):
+
+    answer_to_update = get_object_or_404(Answer, id=answer_id)
+
+    answer_contents = request.POST.get('answerContents', 'none')
+    answer_is_true = request.POST.get('answerIsTrue', 'none')
+
+    if answer_contents == 'none':
+        response = redirect('edit_question', answer_to_update.question_id)
+        return response
+
+    answer_to_update.contents = answer_contents
+    answer_to_update.is_true = (lambda x: True if x == 'True' else False)(answer_is_true)
+    answer_to_update.save()
+
+    response = redirect('edit_question', answer_to_update.question_id)
+    return response
