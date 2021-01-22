@@ -66,8 +66,21 @@
                                             <p style="line-height: 5px" id="answer{{ forloop.counter }}" type="radio" > - {{ answer.contents }}</p>
                                             {% endif %}
                                         {% endfor %}
+                                        <button onclick="toggle('updateQuestionDiv{{ question.id }}')" id="updateQuestion" class="btn btn-dark btn-sm" style="width: 150px" >Zmień pytanie</button>
                                         <a href="{% url 'edit_question' question.id %}" class="btn btn-secondary btn-sm" role="button" style="color:white; width: 150px">Edytuj odpowiedzi</a>
                                         <a href="{% url 'delete_question' question.id %}" class="btn btn-danger btn-sm" role="button" style="color:white; width: 150px">Usuń pytanie</a>
+
+                                        <div class="row">
+                                            <div class="rounded" id="updateQuestionDiv{{ question.id }}" style="display: none; margin-top: 15px; background-color: gainsboro; width: 420px; padding: 10px">
+                                                <form action="{% url 'update_question' question.id%}" method="post">
+                                                    <div class="form-group">
+                                                        <input class="form-control" name="questionContents" id="newQuestion" value="{{ question.contents }}" style="width: 400px">
+                                                    </div>
+                                                    <input type="submit" id="sendBtn" class="btn btn-dark" type="submit"  style="margin-top: 5px; color: white; width: 200px" value="Zatwierdź zmiany">
+                                                </form>
+                                            </div>
+                                        </div>
+
 
                                 </div>
                             </div>

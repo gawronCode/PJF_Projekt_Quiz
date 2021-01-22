@@ -135,6 +135,23 @@ def delete_question(request, question_id):
     return response
 
 
+def update_question(request, question_id):
+
+    question_to_update = get_object_or_404(Question, id=question_id)
+
+    question_contents = request.POST.get('questionContents', 'none')
+
+    if question_contents == 'none':
+        response = redirect('edit', question_to_update.quiz_id)
+        return response
+
+    question_to_update.contents = question_contents
+    question_to_update.save()
+
+    response = redirect('edit', question_to_update.quiz_id)
+    return response
+
+
 def edit_question(request, question_id):
     question = get_object_or_404(Question, id=question_id)
     template = loader.get_template('quizzes/edit_question.html')
